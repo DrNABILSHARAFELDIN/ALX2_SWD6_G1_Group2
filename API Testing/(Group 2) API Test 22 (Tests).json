@@ -1,0 +1,924 @@
+{
+	"info": {
+		"_postman_id": "af516070-7cb2-4e0e-80db-b7873b1692b0",
+		"name": "Simple Books API Testing Project (Group 2)",
+		"description": "(Group 2) Final project collection for API Testing using the Simple Books API and Postman.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43336386",
+		"_collection_link": "https://speeding-moon-984438.postman.co/workspace/Team-Workspace~5698e557-04bb-4962-82e1-82e826546db5/collection/43336386-af516070-7cb2-4e0e-80db-b7873b1692b0?action=share&source=collection_link&creator=43336386"
+	},
+	"item": [
+		{
+			"name": "01 - Get API Status (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"API is up and running\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/status",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"status"
+					]
+				},
+				"description": "Checks if the API is up and running."
+			},
+			"response": []
+		},
+		{
+			"name": "02 - List Books (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('array');",
+							"});",
+							"",
+							"// Extract a random book ID for the Place Order request",
+							"const jsonData = pm.response.json();",
+							"const bookIds = jsonData.map(book => book.id);",
+							"const randomBookId = bookIds[Math.floor(Math.random() * bookIds.length)];",
+							"pm.collectionVariables.set(\"bookId\", randomBookId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/books",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"books"
+					]
+				},
+				"description": "Retrieves a list of all available books."
+			},
+			"response": []
+		},
+		{
+			"name": "03 - Get Single Book (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has book details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"",
+							"    if (!jsonData.id || !jsonData.name || !jsonData.author) {",
+							"        throw new Error(\"❌ Sorry, the book response is missing required details.\");",
+							"    }",
+							"",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"name\");",
+							"    pm.expect(jsonData).to.have.property(\"author\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/books/{{bookId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				},
+				"description": "Fetches details of a specific book by ID."
+			},
+			"response": []
+		},
+		{
+			"name": "04 - Get Single Book (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has book details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"",
+							"    if (!jsonData.id || !jsonData.name || !jsonData.author) {",
+							"        throw new Error(\"❌ Sorry, the book response is missing required details.\");",
+							"    }",
+							"",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"name\");",
+							"    pm.expect(jsonData).to.have.property(\"author\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/books/{{invalidId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"books",
+						"{{invalidId}}"
+					]
+				},
+				"description": "Attempts to retrieve a book using a non-existent ID to test error handling."
+			},
+			"response": []
+		},
+		{
+			"name": "05 - Register Unique Client (Pass)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const name = \"client_\" + Math.floor(Math.random() * 10000);",
+							"const email = name + \"@test.com\";",
+							"pm.collectionVariables.set(\"clientName\", name);",
+							"pm.collectionVariables.set(\"clientEmail\", email);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 201 Created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response includes accessToken\", function () {",
+							"    if (!jsonData.accessToken) {",
+							"        throw new Error(\"❌ Sorry, accessToken was not returned. Registration may have failed.\");",
+							"    }",
+							"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+							"});",
+							"",
+							"// Only set the token if it exists",
+							"if (jsonData.accessToken) {",
+							"    pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clientName\": \"{{clientName}}\",\n  \"clientEmail\": \"{{clientEmail}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/api-clients",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"api-clients"
+					]
+				},
+				"description": "Registers a new client with a unique name and email."
+			},
+			"response": []
+		},
+		{
+			"name": "06 - Register Duplicate Client (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 201 Created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response includes accessToken\", function () {",
+							"    if (!jsonData.accessToken) {",
+							"        throw new Error(\"❌ Sorry, accessToken was not returned. Registration may have failed.\");",
+							"    }",
+							"    pm.expect(jsonData).to.have.property(\"accessToken\");",
+							"});",
+							"",
+							"// Only set the token if it exists",
+							"if (jsonData.accessToken) {",
+							"    pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"clientName\": \"{{clientName}}\",\n  \"clientEmail\": \"{{clientEmail}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/api-clients",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"api-clients"
+					]
+				},
+				"description": "Attempts to register the same client again to test validation of duplicates."
+			},
+			"response": []
+		},
+		{
+			"name": "07 - Submit Order (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Response includes orderId\", function () {",
+							"    if (!jsonData.orderId) {",
+							"        throw new Error(\"❌ Sorry, orderId was not returned. The order may not have been created.\");",
+							"    }",
+							"    pm.expect(jsonData).to.have.property(\"orderId\");",
+							"});",
+							"",
+							"// Only set the variable if valid",
+							"if (jsonData.orderId) {",
+							"    pm.collectionVariables.set(\"orderId\", jsonData.orderId);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"bookId\": {{bookId}},\n  \"customerName\": \"{{clientName}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Places a book order with a valid book ID and client token."
+			},
+			"response": []
+		},
+		{
+			"name": "08 - Submit Order (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Response includes orderId\", function () {",
+							"    if (!jsonData.orderId) {",
+							"        throw new Error(\"❌ Sorry, orderId was not returned. The order may not have been created.\");",
+							"    }",
+							"    pm.expect(jsonData).to.have.property(\"orderId\");",
+							"});",
+							"",
+							"// Only set the variable if valid",
+							"if (jsonData.orderId) {",
+							"    pm.collectionVariables.set(\"orderId\", jsonData.orderId);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"bookId\": {{invalidId}},\n  \"customerName\": \"{{invalidName}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Attempts to place an order with an invalid book ID to test error handling."
+			},
+			"response": []
+		},
+		{
+			"name": "09 - Get All Orders (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Retrieves all book orders placed by the client."
+			},
+			"response": []
+		},
+		{
+			"name": "10 - Get Single Order (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has order details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"",
+							"    if (!jsonData.id || !jsonData.bookId || !jsonData.customerName) {",
+							"        throw new Error(\"❌ Sorry, the order response is missing required details.\");",
+							"    }",
+							"",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"bookId\");",
+							"    pm.expect(jsonData).to.have.property(\"customerName\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{orderId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				},
+				"description": "Fetches a specific order's details by ID."
+			},
+			"response": []
+		},
+		{
+			"name": "11 - Get Single Order (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has order details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"",
+							"    if (!jsonData.id || !jsonData.bookId || !jsonData.customerName) {",
+							"        throw new Error(\"❌ Sorry, the order response is missing required details.\");",
+							"    }",
+							"",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"bookId\");",
+							"    pm.expect(jsonData).to.have.property(\"customerName\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{invalidId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{invalidId}}"
+					]
+				},
+				"description": "Attempts to retrieve an order using a non-existent ID."
+			},
+			"response": []
+		},
+		{
+			"name": "12 - Update Order (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 (Updated)\", function () {",
+							"    if (pm.response.code !== 204) {",
+							"        throw new Error(\"❌ Sorry, the order could not be updated. It may not exist or update data is invalid.\");",
+							"    }",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerName\": \"Updated {{clientName}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{orderId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				},
+				"description": "Updates an order with a new customer name."
+			},
+			"response": []
+		},
+		{
+			"name": "13 - Update Order (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 (Updated)\", function () {",
+							"    if (pm.response.code !== 204) {",
+							"        throw new Error(\"❌ Sorry, the order could not be updated. It may not exist or update data is invalid.\");",
+							"    }",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerName\": \"Updated {{clientName}}\"\n}"
+				},
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{invalidId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{invalidId}}"
+					]
+				},
+				"description": "Attempts to update a non-existent order ID."
+			},
+			"response": []
+		},
+		{
+			"name": "14 - Delete Order (Pass)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 (Deleted)\", function () {",
+							"    if (pm.response.code !== 204) {",
+							"        throw new Error(\"❌ Sorry, the order could not be deleted. It may not exist or has already been deleted.\");",
+							"    }",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{orderId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				},
+				"description": "Deletes an existing order using a valid order ID."
+			},
+			"response": []
+		},
+		{
+			"name": "15 - Delete Order (Fail)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 (Deleted)\", function () {",
+							"    if (pm.response.code !== 204) {",
+							"        throw new Error(\"❌ Sorry, the order could not be deleted. It may not exist or has already been deleted.\");",
+							"    }",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://simple-books-api.glitch.me/orders/{{orderId}}",
+					"protocol": "https",
+					"host": [
+						"simple-books-api",
+						"glitch",
+						"me"
+					],
+					"path": [
+						"orders",
+						"{{orderId}}"
+					]
+				},
+				"description": "Attempts to delete an already deleted or non-existent order."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "invalidName",
+			"value": "Anonymous",
+			"type": "string"
+		},
+		{
+			"key": "invalidId",
+			"value": "100",
+			"type": "string"
+		},
+		{
+			"key": "clientName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "clientEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookId",
+			"value": "",
+			"type": "number"
+		},
+		{
+			"key": "orderId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
