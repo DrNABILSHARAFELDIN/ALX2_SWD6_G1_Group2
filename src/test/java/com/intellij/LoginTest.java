@@ -20,7 +20,7 @@ public class LoginTest {
         driver = new ChromeDriver();
 
         // فتح صفحة تسجيل الدخول
-        driver.get("https://www.jetbrains.com/idea/download/?section=windows"); // استبدل الرابط برابط صفحتك
+        driver.get("https://lms.skillsdynamix.com/login/index.php"); // استبدل الرابط برابط صفحتك
         driver.manage().window().maximize(); // تكبير النافذة
     }
 
@@ -28,22 +28,23 @@ public class LoginTest {
     public void testLogin() {
         try {
             // العثور على حقل اسم المستخدم وإدخال القيمة
-            driver.findElement(By.id("username")).sendKeys("yourUsername");
+            driver.findElement(By.id("username")).sendKeys("drnabil.nabih");
 
             // العثور على حقل كلمة المرور وإدخال القيمة
-            driver.findElement(By.id("password")).sendKeys("yourPassword");
+            driver.findElement(By.id("password")).sendKeys("drnabel@NABIH2D");
 
             // النقر على زر تسجيل الدخول
-            driver.findElement(By.id("loginButton")).click();
+            driver.findElement(By.id("loginbtn")).click();
 
             // التحقق من نجاح تسجيل الدخول
-            boolean isLoggedIn = driver.findElement(By.id("welcomeMessage")).isDisplayed();
+            boolean isLoggedIn = driver.findElement(By.id("NABIL NABIH ABDELWAHAB")).isDisplayed();
             assertTrue(isLoggedIn, "لم يتم تسجيل الدخول بنجاح!");
 
         } catch (Exception e) {
             System.err.println("حدث خطأ أثناء تنفيذ الاختبار: " + e.getMessage());
         }
     }
+
 
     @AfterEach
     public void tearDown() {
